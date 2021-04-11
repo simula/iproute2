@@ -96,7 +96,8 @@ install: all
 	install -m 0644 include/bpf_elf.h $(DESTDIR)$(HDRDIR)
 
 version:
-	echo "static const char version[] = \""`git describe --tags --long`"\";" \
+	git describe --tags --long | sed -e "s#debian/##g" -e "s#-g\([0-9a-f]*\)#+g`env LANG=en date -u +"%Y%m%d%H%M"`~\1#g" >version
+	echo "static const char version[] = \""`cat version`"\";" \
 		> include/version.h
 
 clean:
@@ -122,5 +123,12 @@ check: all
 
 cscope:
 	cscope -b -q -R -Iinclude -sip -slib -smisc -snetem -stc
+
+dist:	distclean
+	$(MAKE) version
+	rm -rf iproute2-`cat version`
+	mkdir iproute2-`cat version`
+	cp -a bash-completion bridge configure COPYING debian devlink doc etc examples genl include ip lib Makefile man misc netem rdma README README.devel schema tc testsuite tipc iproute2-`cat version`/
+	tar cJvf iproute2-`cat version`.tar.xz iproute2-`cat version`
 
 .EXPORT_ALL_VARIABLES:

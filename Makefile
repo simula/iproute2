@@ -95,9 +95,9 @@ install: all
 	install -m 0644 bash-completion/devlink $(DESTDIR)$(BASH_COMPDIR)
 	install -m 0644 include/bpf_elf.h $(DESTDIR)$(HDRDIR)
 
+VERSION := "5.10.0-4-1+g202104111308~20e0330b"
 version:
-	git describe --tags --long | sed -e "s#debian/##g" -e "s#-g\([0-9a-f]*\)#+g`env LANG=en date -u +"%Y%m%d%H%M"`~\1#g" >version
-	echo "static const char version[] = \""`cat version`"\";" \
+	echo "static const char version[] = \""$(VERSION)"\";" \
 		> include/version.h
 
 clean:
@@ -108,6 +108,7 @@ clobber:
 	touch config.mk
 	$(MAKE) clean
 	rm -f config.mk cscope.*
+	rm -f version
 
 distclean: clobber
 
@@ -126,9 +127,9 @@ cscope:
 
 dist:	distclean
 	$(MAKE) version
-	rm -rf iproute2-`cat version`
-	mkdir iproute2-`cat version`
-	cp -a bash-completion bridge configure COPYING debian devlink doc etc examples genl include ip lib Makefile man misc netem rdma README README.devel schema tc testsuite tipc iproute2-`cat version`/
-	tar cJvf iproute2-`cat version`.tar.xz iproute2-`cat version`
+	rm -rf iproute2-$(VERSION)
+	mkdir iproute2-$(VERSION)
+	cp -a bash-completion bridge configure COPYING debian devlink doc etc examples genl include ip lib Makefile man misc netem rdma README README.devel schema tc testsuite tipc iproute2-$(VERSION)/
+	tar cJf iproute2-$(VERSION).tar.xz iproute2-$(VERSION)
 
 .EXPORT_ALL_VARIABLES:

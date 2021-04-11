@@ -95,7 +95,7 @@ install: all
 	install -m 0644 bash-completion/devlink $(DESTDIR)$(BASH_COMPDIR)
 	install -m 0644 include/bpf_elf.h $(DESTDIR)$(HDRDIR)
 
-VERSION := "5.10.0-4-1+g202104111308~20e0330b"
+VERSION := "5.10.0-4-3+g202104111703~b0670407"
 version:
 	echo "static const char version[] = \""$(VERSION)"\";" \
 		> include/version.h
